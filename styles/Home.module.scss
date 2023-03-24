@@ -1,4 +1,5 @@
 .headerDisplay {
+  z-index: 1;
   width: 100%;
   position: fixed;
   top: 0;
@@ -14,6 +15,9 @@
 }
 
 .cards {
-  position: absolute;
-  top: 200vh;
+  width: 70%;
+  height: 40vw;
+  margin: 0 auto;
+  position: relative;
+  top: 223px;
 }
