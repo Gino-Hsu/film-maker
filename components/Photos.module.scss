@@ -1,11 +1,12 @@
 .photos {
-  position: relative;
-  display: flex;
+  width: max-content;
   margin: 0 10px;
-  overflow-x: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  overflow: hidden;
+}
+
+.scroll__container {
+  display: flex;
+  position: relative;
 }
 
 .container {

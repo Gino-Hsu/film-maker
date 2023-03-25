@@ -11,6 +11,7 @@ import styles from '@/styles/Home.module.scss';
 export default function Home() {
   const [headerShowed, setHeaderShowed] = useState(true);
   const videoElement = useRef();
+  const photosElement = useRef();
 
   const handleScroll = () => {
     const videoHeight = videoElement.current.clientHeight;
@@ -66,16 +67,36 @@ export default function Home() {
     }
   };
 
+  const handleScrollBar = e => {
+    const mousePosition = e.clientY;
+    const photoPositionTop = photosElement.current.offsetTop;
+    const windowPosition = window.scrollY;
+
+    if (mousePosition + windowPosition > photoPositionTop) {
+      // 停止 window scroll
+      document.documentElement.style.overflowY = 'hidden';
+      photosElement.current.scrollIntoView({
+        behavior: 'smooth',
+      });
+    } else {
+      // 恢復 window scroll
+      document.documentElement.style.overflowY = 'auto';
+    }
+  };
+
   useEffect(() => {
     // 掛載監聽器，監聽 window 的滾動事件
     window.addEventListener('scroll', handleScroll);
     handleScroll();
     // 掛載監聽器，監聽 window size 改變
     window.addEventListener('resize', handleSize);
+    // 掛載監聽器，監聽滑鼠位置
+    window.addEventListener('mousemove', handleScrollBar);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleSize);
+      window.addEventListener('mousemove', handleScrollBar);
     };
   }, []);
 
@@ -115,7 +136,7 @@ export default function Home() {
           </p>
         </div>
         <section>
-          <Photos />
+          <Photos photosRef={photosElement} photosElement={photosElement} />
         </section>
       </main>
     </>
