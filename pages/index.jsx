@@ -4,6 +4,7 @@ import Head from 'next/head';
 import Header from '../components/Header';
 import Cards from '../components/Cards';
 import Video from '@/components/Video';
+import Photos from '@/components/Photos';
 
 import styles from '@/styles/Home.module.scss';
 
@@ -113,6 +114,9 @@ export default function Home() {
             content creators.
           </p>
         </div>
+        <section>
+          <Photos />
+        </section>
       </main>
     </>
   );

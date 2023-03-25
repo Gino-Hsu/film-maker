@@ -1,0 +1,22 @@
+.photos {
+  position: relative;
+  display: flex;
+  margin: 0 10px;
+  overflow-x: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+.container {
+  margin: 0 30px;
+  width: 400px;
+  height: 800px;
+  flex-shrink: 0;
+  overflow: hidden;
+
+  img {
+    display: block;
+    width: 100%;
+  }
+}

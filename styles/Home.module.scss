@@ -16,14 +16,6 @@ $discription_mt_mb: 355px;
   }
 }
 
-.cards {
-  width: 70%;
-  height: 40vw;
-  margin: 0 auto;
-  position: relative;
-  top: $cards_position_top;
-}
-
 .description1 {
   width: 50vw;
   margin: $discription_mt_mb auto;
@@ -42,4 +34,12 @@ $discription_mt_mb: 355px;
 .description2 {
   @extend .description1;
   margin-top: $discription_mt_mb;
+}
+
+.cards {
+  width: 70%;
+  height: 40vw;
+  margin: 0 auto;
+  position: relative;
+  top: $cards_position_top;
 }
