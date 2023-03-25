@@ -1,6 +1,11 @@
 import { useState } from 'react';
 import styles from './Cards.module.scss';
 
+const cardsSrc = {
+  cardOne: '/card1.png',
+  cardTwo: '/card2.png',
+};
+
 export default function Cards() {
   const [showedCard, setShowedCard] = useState('init');
 
@@ -25,7 +30,7 @@ export default function Cards() {
           }
           onClick={() => handleShowed('left')}
         >
-          <img className={styles.image} src='/card1.png' alt='卡片1' />
+          <img className={styles.image} src={cardsSrc.cardOne} alt='卡片1' />
         </div>
       </div>
       <div className={styles.right__container}>
@@ -39,7 +44,7 @@ export default function Cards() {
           }
           onClick={() => handleShowed('right')}
         >
-          <img className={styles.image} src='/card2.png' alt='卡片2' />
+          <img className={styles.image} src={cardsSrc.cardTwo} alt='卡片2' />
         </div>
       </div>
     </div>

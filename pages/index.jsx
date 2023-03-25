@@ -1,26 +1,80 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 
 import Header from '../components/Header';
 import Cards from '../components/Cards';
+import Video from '@/components/Video';
 
 import styles from '@/styles/Home.module.scss';
 
 export default function Home() {
-  const [scrollPosition, setScrollPosition] = useState(0);
+  const [headerShowed, setHeaderShowed] = useState(true);
+  const videoElement = useRef();
 
   const handleScroll = () => {
-    // window.scrollY 垂直滾動的 pix，用 setState 存起來
-    const position = window.scrollY;
-    setScrollPosition(position);
+    const videoHeight = videoElement.current.clientHeight;
+    const videoPositionTop = videoElement.current.offsetTop;
+    const windowHeight = window.innerHeight;
+    const windowPosition = window.scrollY;
+
+    handleHeaderShowed(windowPosition);
+    handleVidePlay(videoHeight, videoPositionTop, windowHeight, windowPosition);
+  };
+
+  const handleSize = () => {
+    const videoHeight = videoElement.current.clientHeight;
+    const videoPositionTop = videoElement.current.offsetTop;
+    const windowHeight = window.innerHeight;
+    const windowPosition = window.scrollY;
+
+    handleVidePlay(videoHeight, videoPositionTop, windowHeight, windowPosition);
+  };
+
+  const handleHeaderShowed = windowPosition => {
+    if (windowPosition > 300) {
+      setHeaderShowed(false);
+    } else {
+      setHeaderShowed(true);
+    }
+  };
+
+  const handleVidePlay = (
+    videoHeight,
+    videoPositionTop,
+    windowHeight,
+    windowPosition
+  ) => {
+    // 影片播放的範圍
+    const videoPlayScope =
+      windowHeight - (videoPositionTop - windowPosition) > videoHeight * 0.3 &&
+      windowPosition - videoPositionTop < videoHeight * 0.7;
+    // 影片時間重置為 0 的範圍
+    const videoResetScope =
+      windowPosition - (videoPositionTop + videoHeight) > 0 ||
+      windowPosition + windowHeight - videoPositionTop < 0;
+
+    if (videoPlayScope) {
+      videoElement.current.play();
+    } else {
+      videoElement.current.pause();
+    }
+
+    if (videoResetScope) {
+      videoElement.current.pause();
+      videoElement.current.currentTime = 0;
+    }
   };
 
   useEffect(() => {
     // 掛載監聽器，監聽 window 的滾動事件
     window.addEventListener('scroll', handleScroll);
+    handleScroll();
+    // 掛載監聽器，監聽 window size 改變
+    window.addEventListener('resize', handleSize);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleSize);
     };
   }, []);
 
@@ -36,9 +90,7 @@ export default function Home() {
         <div
           className={
             // 當垂直滾動超過300px時，header隱藏起來
-            scrollPosition > 300
-              ? styles.headerDisplay__hidden
-              : styles.headerDisplay
+            headerShowed ? styles.headerDisplay : styles.headerDisplay__hidden
           }
         >
           <Header />
@@ -46,6 +98,21 @@ export default function Home() {
         <section className={styles.cards}>
           <Cards />
         </section>
+        <div className={styles.description1}>
+          <p>
+            We love to visualize stories because we love people and they inspire
+            us.
+          </p>
+        </div>
+        <section className={styles.video}>
+          <Video videoRef={videoElement} />
+        </section>
+        <div className={styles.description2}>
+          <p>
+            We are a creative agency, film production, branded & original
+            content creators.
+          </p>
+        </div>
       </main>
     </>
   );
