@@ -1,10 +1,12 @@
 import { useState, useEffect, useRef } from 'react';
 import Head from 'next/head';
 
-import Header from '../components/Header';
-import Cards from '../components/Cards';
+import Header from '@/components/Header';
+import Cards from '@/components/Cards';
 import Video from '@/components/Video';
 import Photos from '@/components/Photos';
+
+import { handleHeaderShowed, handleVideoPlay } from '@/utils/handleFunc';
 
 import styles from '@/styles/Home.module.scss';
 
@@ -15,64 +17,39 @@ export default function Home() {
   const scrollIntoPhotos = useRef(true);
 
   const handleScroll = () => {
-    const videoHeight = videoElement.current.clientHeight;
-    const videoPositionTop = videoElement.current.offsetTop;
+    const videoHeight = videoElement.current?.clientHeight;
+    const videoPositionTop = videoElement.current?.offsetTop;
     const windowHeight = window.innerHeight;
     const windowPosition = window.scrollY;
 
-    handleHeaderShowed(windowPosition);
-    handleVidePlay(videoHeight, videoPositionTop, windowHeight, windowPosition);
+    handleHeaderShowed(windowPosition, setHeaderShowed);
+    handleVideoPlay(
+      videoElement.current,
+      videoHeight,
+      videoPositionTop,
+      windowHeight,
+      windowPosition
+    );
   };
 
   const handleSize = () => {
-    const videoHeight = videoElement.current.clientHeight;
-    const videoPositionTop = videoElement.current.offsetTop;
+    const videoHeight = videoElement.current?.clientHeight;
+    const videoPositionTop = videoElement.current?.offsetTop;
     const windowHeight = window.innerHeight;
     const windowPosition = window.scrollY;
 
-    handleVidePlay(videoHeight, videoPositionTop, windowHeight, windowPosition);
-  };
-
-  const handleHeaderShowed = windowPosition => {
-    if (windowPosition > 300) {
-      setHeaderShowed(false);
-    } else {
-      setHeaderShowed(true);
-    }
-  };
-
-  const handleVidePlay = (
-    videoHeight,
-    videoPositionTop,
-    windowHeight,
-    windowPosition
-  ) => {
-    // 影片播放的範圍
-    const videoPlayScope =
-      windowHeight - (videoPositionTop - windowPosition) > videoHeight * 0.3 &&
-      windowPosition - videoPositionTop < videoHeight * 0.7;
-    // 影片時間重置為 0 的範圍
-    const videoResetScope =
-      windowPosition - (videoPositionTop + videoHeight) > 0 ||
-      windowPosition + windowHeight - videoPositionTop < 0;
-
-    // videoElement.current.play();
-
-    if (videoPlayScope) {
-      videoElement.current.play();
-    } else {
-      videoElement.current.pause();
-    }
-
-    if (videoResetScope) {
-      videoElement.current.pause();
-      videoElement.current.currentTime = 0;
-    }
+    handleVideoPlay(
+      videoElement.current,
+      videoHeight,
+      videoPositionTop,
+      windowHeight,
+      windowPosition
+    );
   };
 
   const handleMouseMove = e => {
     const mousePosition = e.clientY;
-    const photoPositionTop = photosElement.current.offsetTop;
+    const photoPositionTop = photosElement.current?.offsetTop;
     const windowPosition = window.scrollY;
 
     if (mousePosition + windowPosition > photoPositionTop) {
@@ -90,7 +67,6 @@ export default function Home() {
   useEffect(() => {
     // 掛載監聽器，監聽 window 的滾動事件
     window.addEventListener('scroll', handleScroll);
-    handleScroll();
     // 掛載監聽器，監聽 window size 改變
     window.addEventListener('resize', handleSize);
     // 掛載監聽器，監聽滑鼠位置
