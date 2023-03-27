@@ -27,27 +27,26 @@ const photos = [
 export default function Photos(props) {
   const [scrollLeft, setScrollLeft] = useState(0);
 
-  console.log(scrollLeft);
   const handleOnWheel = e => {
-    e.stopPropagation();
     const value = e.deltaY;
+    const windowWidth = window.innerWidth;
+    const photoWidth = props.photosElement.current.offsetWidth;
+
     setScrollLeft(pre => {
       const scrollValue = pre - value;
-      const windowWidth = window.innerWidth;
-      const photoWidth = props.photosElement.current.offsetWidth;
 
-      console.log('1', photoWidth);
-      if (scrollValue > 0) {
+      if (scrollValue >= 0) {
+        document.documentElement.style.overflowY = 'auto';
         return 0;
-      } else if (scrollValue < windowWidth - photoWidth) {
+      } else if (scrollValue <= windowWidth - photoWidth) {
+        document.documentElement.style.overflowY = 'auto';
         return windowWidth - photoWidth;
       } else {
+        document.documentElement.style.overflowY = 'hidden';
         return pre - value;
       }
     });
   };
-
-  console.log(scrollLeft);
 
   return (
     <div

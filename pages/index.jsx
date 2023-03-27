@@ -12,6 +12,7 @@ export default function Home() {
   const [headerShowed, setHeaderShowed] = useState(true);
   const videoElement = useRef();
   const photosElement = useRef();
+  const scrollIntoPhotos = useRef(true);
 
   const handleScroll = () => {
     const videoHeight = videoElement.current.clientHeight;
@@ -67,20 +68,20 @@ export default function Home() {
     }
   };
 
-  const handleScrollBar = e => {
+  const handleMouseMove = e => {
     const mousePosition = e.clientY;
     const photoPositionTop = photosElement.current.offsetTop;
     const windowPosition = window.scrollY;
 
     if (mousePosition + windowPosition > photoPositionTop) {
-      // 停止 window scroll
-      document.documentElement.style.overflowY = 'hidden';
-      photosElement.current.scrollIntoView({
-        behavior: 'smooth',
-      });
+      if (scrollIntoPhotos.current) {
+        photosElement.current.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }
+      scrollIntoPhotos.current = false;
     } else {
-      // 恢復 window scroll
-      document.documentElement.style.overflowY = 'auto';
+      scrollIntoPhotos.current = true;
     }
   };
 
@@ -91,12 +92,12 @@ export default function Home() {
     // 掛載監聽器，監聽 window size 改變
     window.addEventListener('resize', handleSize);
     // 掛載監聽器，監聽滑鼠位置
-    window.addEventListener('mousemove', handleScrollBar);
+    window.addEventListener('mousemove', handleMouseMove);
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleSize);
-      window.addEventListener('mousemove', handleScrollBar);
+      window.removeEventListener('mousemove', handleMouseMove);
     };
   }, []);
 
