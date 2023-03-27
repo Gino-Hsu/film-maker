@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import styles from './Photos.module.scss';
 
 const photos = [
@@ -26,27 +26,35 @@ const photos = [
 
 export default function Photos(props) {
   const [scrollLeft, setScrollLeft] = useState(0);
+  const PhotoContainerElement = useRef();
 
   const handleOnWheel = e => {
     const value = e.deltaY;
     const windowWidth = window.innerWidth;
-    const photoWidth = props.photosElement.current.offsetWidth;
-    document.documentElement.style.overflowY = 'hidden';
-    setScrollLeft(pre => {
-      const scrollValue = pre - value;
+    const photoWidth = PhotoContainerElement.current.offsetWidth;
 
-      if (scrollValue > 0) {
+    document.documentElement.style.overflowY = 'hidden';
+
+    setScrollLeft(pre => {
+      const scrollValue = pre + value;
+
+      if (scrollValue < 0) {
         document.documentElement.style.overflowY = 'auto';
         return 0;
-      } else if (scrollValue < windowWidth - photoWidth) {
-        document.documentElement.style.overflowY = 'auto';
-        return windowWidth - photoWidth;
+      } else if (scrollValue > photoWidth - windowWidth) {
+        return photoWidth - windowWidth;
       } else {
-        // document.documentElement.style.overflowY = 'hidden';
-        return pre - value;
+        return pre + value;
       }
     });
   };
+
+  useEffect(() => {
+    if (scrollLeft > 0) {
+      window.scrollTo(0, document.body.scrollHeight);
+    }
+    props.photosRef.current.scrollTo(scrollLeft, 0);
+  }, [scrollLeft]);
 
   return (
     <div
@@ -54,7 +62,7 @@ export default function Photos(props) {
       onWheel={e => handleOnWheel(e)}
       ref={props.photosRef}
     >
-      <div className={styles.scroll__container} style={{ left: scrollLeft }}>
+      <div className={styles.scroll__container} ref={PhotoContainerElement}>
         {photos.map(photo => (
           <div key={photo.id} className={styles.container}>
             <img src={photo.photoSrc} alt={`圖片${photo.id}`} />

@@ -61,6 +61,7 @@ export default function Home() {
       scrollIntoPhotos.current = false;
     } else {
       scrollIntoPhotos.current = true;
+      document.documentElement.style.overflowY = 'auto';
     }
   };
 
