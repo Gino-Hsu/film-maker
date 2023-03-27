@@ -35,10 +35,10 @@ export default function Photos(props) {
     setScrollLeft(pre => {
       const scrollValue = pre - value;
 
-      if (scrollValue >= 0) {
+      if (scrollValue > 0) {
         document.documentElement.style.overflowY = 'auto';
         return 0;
-      } else if (scrollValue <= windowWidth - photoWidth) {
+      } else if (scrollValue < windowWidth - photoWidth) {
         document.documentElement.style.overflowY = 'auto';
         return windowWidth - photoWidth;
       } else {

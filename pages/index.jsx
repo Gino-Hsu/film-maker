@@ -56,6 +56,8 @@ export default function Home() {
       windowPosition - (videoPositionTop + videoHeight) > 0 ||
       windowPosition + windowHeight - videoPositionTop < 0;
 
+    videoElement.current.play();
+
     if (videoPlayScope) {
       videoElement.current.play();
     } else {

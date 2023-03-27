@@ -22,7 +22,6 @@
   &:has(.animated__up) {
     z-index: 1;
   }
-
   & .animated__up {
     animation: left-move-up 0.5s forwards;
   }
