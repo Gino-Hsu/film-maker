@@ -31,7 +31,7 @@ export default function Photos(props) {
     const value = e.deltaY;
     const windowWidth = window.innerWidth;
     const photoWidth = props.photosElement.current.offsetWidth;
-
+    document.documentElement.style.overflowY = 'hidden';
     setScrollLeft(pre => {
       const scrollValue = pre - value;
 
@@ -42,7 +42,7 @@ export default function Photos(props) {
         document.documentElement.style.overflowY = 'auto';
         return windowWidth - photoWidth;
       } else {
-        document.documentElement.style.overflowY = 'hidden';
+        // document.documentElement.style.overflowY = 'hidden';
         return pre - value;
       }
     });

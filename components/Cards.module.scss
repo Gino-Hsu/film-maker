@@ -8,18 +8,19 @@
 .right__container {
   position: absolute;
   transition: transform 0.3s ease-in;
+  perspective: 300px;
+
   &:hover {
     cursor: pointer;
-    transform: translate3d(0, 0, 100px);
+    transform: translateZ(50px);
   }
 }
 
 .left__container {
   z-index: -1;
   width: 60%;
-  perspective: 300px;
 
-  &:has(.animated__up) {
+  &.index__up {
     z-index: 1;
   }
   & .animated__up {
@@ -35,9 +36,8 @@
   width: 80%;
   bottom: 0;
   right: 0;
-  perspective: 300px;
 
-  &:has(.animated__down) {
+  &.index__down {
     z-index: -1;
   }
   & .animated__up {
@@ -61,7 +61,7 @@
     transform: translate(-50px, -100px) scale(1.1) rotate3d(0, 1, 1, 8deg);
   }
   100% {
-    transform: translate(0) scale(1.3);
+    transform: translate(0, 0) scale(1.3);
   }
 }
 
@@ -79,7 +79,7 @@
 
 @keyframes right-move-up {
   0% {
-    transform: translate(0, 0) scale(0.8);
+    transform: translate(0, 0) scale(0.7);
   }
   50% {
     transform: translate(50px, 100px) scale(0.9) rotate3d(0, 1, 1, -8deg);
@@ -97,6 +97,6 @@
     transform: translate(50px, 100px) scale(0.9) rotate3d(0, 1, 1, -8deg);
   }
   100% {
-    transform: translate(0) scale(0.8);
+    transform: translate(0) scale(0.7);
   }
 }
