@@ -200,10 +200,10 @@ useEffect(() => {
 - 為了確保滑鼠進入後，整個元素在視窗內(使用者不會有看不到內容的情形)，滑鼠是否進入元素內了，如果有 element.scrollIntoView()。
 
 ```javascript
-function handleMouseInPhotos(...) {
+ const handleMouseMove = e => {
   ...
-  if (mousePosition + winPosition > photoPositionTop) {
-    photosRef.scrollIntoView({
+  if (mousePosition + windowPosition > photoPositionTop) {
+    photosElement.current.scrollIntoView({
         behavior: 'smooth',
     });
   } else {
