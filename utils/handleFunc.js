@@ -33,3 +33,23 @@ export function handleVideoPlay(
     videoRef.currentTime = 0;
   }
 }
+
+export function handleMouseInPhotos(
+  mouseRef,
+  photosRef,
+  mousePosition,
+  photoPositionTop,
+  winPosition
+) {
+  if (mousePosition + winPosition > photoPositionTop) {
+    if (mouseRef) {
+      photosRef.scrollIntoView({
+        behavior: 'smooth',
+      });
+    }
+    mouseRef = false;
+  } else {
+    mouseRef = true;
+    document.documentElement.style.overflowY = 'auto';
+  }
+}

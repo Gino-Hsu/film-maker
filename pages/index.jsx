@@ -6,7 +6,11 @@ import Cards from '@/components/Cards';
 import Video from '@/components/Video';
 import Photos from '@/components/Photos';
 
-import { handleHeaderShowed, handleVideoPlay } from '@/utils/handleFunc';
+import {
+  handleHeaderShowed,
+  handleVideoPlay,
+  handleMouseInPhotos,
+} from '@/utils/handleFunc';
 
 import styles from '@/styles/Home.module.scss';
 
@@ -14,7 +18,7 @@ export default function Home() {
   const [headerShowed, setHeaderShowed] = useState(true);
   const videoElement = useRef();
   const photosElement = useRef();
-  const scrollIntoPhotos = useRef(true);
+  const mouseInPhotos = useRef(true);
 
   const handleScroll = () => {
     const videoHeight = videoElement.current?.clientHeight;
@@ -52,17 +56,13 @@ export default function Home() {
     const photoPositionTop = photosElement.current?.offsetTop;
     const windowPosition = window.scrollY;
 
-    if (mousePosition + windowPosition > photoPositionTop) {
-      if (scrollIntoPhotos.current) {
-        photosElement.current.scrollIntoView({
-          behavior: 'smooth',
-        });
-      }
-      scrollIntoPhotos.current = false;
-    } else {
-      scrollIntoPhotos.current = true;
-      document.documentElement.style.overflowY = 'auto';
-    }
+    handleMouseInPhotos(
+      mouseInPhotos.current,
+      photosElement.current,
+      mousePosition,
+      photoPositionTop,
+      windowPosition
+    );
   };
 
   useEffect(() => {

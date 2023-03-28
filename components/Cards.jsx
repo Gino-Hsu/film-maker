@@ -33,7 +33,7 @@ export default function Cards() {
               ? styles.animated__down
               : ''
           }
-          onClick={() => handleShowed('left')}
+          onClick={handleShowed}
         >
           <img className={styles.image} src={cardsSrc.cardOne} alt='卡片1' />
         </div>
@@ -52,7 +52,7 @@ export default function Cards() {
               ? styles.animated__down
               : ''
           }
-          onClick={() => handleShowed('right')}
+          onClick={handleShowed}
         >
           <img className={styles.image} src={cardsSrc.cardTwo} alt='卡片2' />
         </div>
