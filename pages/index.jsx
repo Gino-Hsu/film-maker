@@ -78,10 +78,7 @@ export default function Home() {
     // 掛載監聽器，監聽滑鼠位置
     window.addEventListener('mousemove', handleMouseMove);
 
-    console.log('1');
-
     return () => {
-      console.log('2');
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleSize);
       window.removeEventListener('mousemove', handleMouseMove);
