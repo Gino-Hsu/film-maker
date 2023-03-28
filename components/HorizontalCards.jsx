@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
-import styles from './Photos.module.scss';
+import styles from './HorizontalCards.module.scss';
 
 const photos = [
   {
@@ -26,19 +26,21 @@ const photos = [
 
 export default function Photos(props) {
   const [scrollLeft, setScrollLeft] = useState(0);
-  const PhotoContainerElement = useRef();
+  const photoContainerElement = useRef();
 
   const handleOnWheel = e => {
     const value = e.deltaY;
     const windowWidth = window.innerWidth;
-    const photoWidth = PhotoContainerElement.current.offsetWidth;
+    const photoWidth = photoContainerElement.current.offsetWidth;
 
+    // 停止瀏覽器 scrolling
     document.documentElement.style.overflowY = 'hidden';
 
     setScrollLeft(pre => {
       const scrollValue = pre + value;
 
       if (scrollValue < 0) {
+        // 開啟瀏覽器 scrolling
         document.documentElement.style.overflowY = 'auto';
         return 0;
       } else if (scrollValue > photoWidth - windowWidth) {
@@ -51,8 +53,10 @@ export default function Photos(props) {
 
   useEffect(() => {
     if (scrollLeft > 0) {
-      window.scrollTo(0, document.body.scrollHeight);
+      // 確保元素位於視窗內
+      window.scrollTo(0, photoContainerElement.current.offsetTop);
     }
+    // 元素橫向滾動
     props.photosRef.current.scrollTo(scrollLeft, 0);
   }, [scrollLeft]);
 
@@ -62,7 +66,7 @@ export default function Photos(props) {
       onWheel={e => handleOnWheel(e)}
       ref={props.photosRef}
     >
-      <div className={styles.scroll__container} ref={PhotoContainerElement}>
+      <div className={styles.scroll__container} ref={photoContainerElement}>
         {photos.map(photo => (
           <div key={photo.id} className={styles.container}>
             <img src={photo.photoSrc} alt={`圖片${photo.id}`} />

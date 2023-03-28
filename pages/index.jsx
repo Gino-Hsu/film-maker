@@ -1,23 +1,21 @@
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 
 import Header from '@/components/Header';
-import Cards from '@/components/Cards';
+import ShuffleCards from '@/components/ShuffleCards';
 import Video from '@/components/Video';
-import Photos from '@/components/Photos';
+import HorizontalCards from '@/components/HorizontalCards';
 
-import {
-  handleHeaderShowed,
-  handleVideoPlay,
-  handleMouseInPhotos,
-} from '@/utils/handleFunc';
+import { handleHeaderShowed, handleVideoPlay } from '@/utils/handleFunc';
 
 import styles from '@/styles/Home.module.scss';
 
 export default function Home() {
   const [headerShowed, setHeaderShowed] = useState(true);
+
   const videoElement = useRef();
   const photosElement = useRef();
+  // 存滑鼠是否在元素內，且還未執行 scrollIntoView() 的狀態
   const mouseInPhotos = useRef(true);
 
   const handleScroll = () => {
@@ -26,7 +24,9 @@ export default function Home() {
     const windowHeight = window.innerHeight;
     const windowPosition = window.scrollY;
 
+    // 控制 Header 隱藏或顯示
     handleHeaderShowed(windowPosition, setHeaderShowed);
+    // 控制 Video 播放、暫停或 reset
     handleVideoPlay(
       videoElement.current,
       videoHeight,
@@ -42,6 +42,7 @@ export default function Home() {
     const windowHeight = window.innerHeight;
     const windowPosition = window.scrollY;
 
+    // 控制 Video 播放、暫停或 reset
     handleVideoPlay(
       videoElement.current,
       videoHeight,
@@ -56,13 +57,17 @@ export default function Home() {
     const photoPositionTop = photosElement.current?.offsetTop;
     const windowPosition = window.scrollY;
 
-    handleMouseInPhotos(
-      mouseInPhotos.current,
-      photosElement.current,
-      mousePosition,
-      photoPositionTop,
-      windowPosition
-    );
+    if (mousePosition + windowPosition > photoPositionTop) {
+      if (mouseInPhotos.current) {
+        photosElement.current.scrollIntoView({
+          behavior: 'smooth',
+        });
+      }
+      mouseInPhotos.current = false;
+    } else {
+      document.documentElement.style.overflowY = 'auto';
+      mouseInPhotos.current = true;
+    }
   };
 
   useEffect(() => {
@@ -73,9 +78,11 @@ export default function Home() {
     // 掛載監聽器，監聽滑鼠位置
     window.addEventListener('mousemove', handleMouseMove);
 
+    console.log('1');
+
     return () => {
+      console.log('2');
       window.removeEventListener('scroll', handleScroll);
-      window.addEventListener('wheel', handleScroll);
       window.removeEventListener('resize', handleSize);
       window.removeEventListener('mousemove', handleMouseMove);
     };
@@ -98,7 +105,7 @@ export default function Home() {
           <Header />
         </div>
         <section className={styles.cards}>
-          <Cards />
+          <ShuffleCards />
         </section>
         <div className={styles.description1}>
           <p>
@@ -116,7 +123,7 @@ export default function Home() {
           </p>
         </div>
         <section>
-          <Photos photosRef={photosElement} photosElement={photosElement} />
+          <HorizontalCards photosRef={photosElement} />
         </section>
       </main>
     </>

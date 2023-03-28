@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import styles from './Cards.module.scss';
+import styles from './ShuffleCards.module.scss';
 
 const cardsSrc = {
   cardOne: '/card1.png',
