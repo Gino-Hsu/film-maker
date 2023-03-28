@@ -75,6 +75,7 @@ export default function Home() {
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.addEventListener('wheel', handleScroll);
       window.removeEventListener('resize', handleSize);
       window.removeEventListener('mousemove', handleMouseMove);
     };
@@ -91,7 +92,6 @@ export default function Home() {
       <main>
         <div
           className={
-            // 當垂直滾動超過300px時，header隱藏起來
             headerShowed ? styles.headerDisplay : styles.headerDisplay__hidden
           }
         >
