@@ -1,7 +1,5 @@
 ## 規格說明
 
-
-
 - Header：往下滑動時 (scrollTop > 300px) 隱藏 Header，滾輪向上捲動時顯示 Header，隱藏及顯示的過程有 transition 效果。
 - Cards Shuffle Block：卡片切換的特效，引用透視視角確保視覺往真實視角逼近。
 - Effective video block：entry ratio 大於 30% 後播放影片，小於時暫停播放。當 invisible 時，主動將播放進度 reset 回 time = 0。
@@ -9,36 +7,35 @@
 
 ## 工具
 
-
-
 - Next.js v13.2.4
 - React.js v18.2.0
 - Sass v1.60.0
 
 ## 實作方法
 
-
 ### Header
+
+![gif](./public/gifHeader.gif)
 
 - 利用 React Hook：useState，控制 Header 隱藏/顯示，boolean(true：顯示 / false：隱藏)。
 
-```
+```javascript
 const [headerShowed, setHeaderShowed] = useState(true);
 ```
 
 - className= {styles.headerDisplay} 或 {styles.headerDisplay\_\_hidden} 在畫面上呈現顯示或隱藏的效果。
 
-```
-<div className={
-  headerShowed ? styles.headerDisplay : styles.headerDisplay__hidden
-}>
+```javascript
+<div
+  className={headerShowed ? styles.headerDisplay : styles.headerDisplay__hidden}
+>
   <Header />
 </div>
 ```
 
 - 控制邏輯：在 useEffect 中掛載監聽器，監聽 window 的 scroll 事件，當觸發執行 handleFunc。
 
-```
+```javascript
 useEffect(() => {
    window.addEventListener('scroll', handleScroll);
 
@@ -51,7 +48,7 @@ useEffect(() => {
 
 - windowPosition = window.scrollY 畫面垂直滾動的值，當 > 300 setState(false)，反之 setState(true)。
 
-```
+```javascript
 function handleHeaderShowed(winPosition, setState) {
   if (winPosition > 300) {
     setState(false);
@@ -60,34 +57,37 @@ function handleHeaderShowed(winPosition, setState) {
   }
 }
 ```
+
 ---
 
 ### Cards Shuffle Block
 
+![gif](./public/gifShuffle.gif)
+
 - 利用 React Hook：useState，控制左邊卡片在上或右邊卡片在上，string('left'：左邊卡片在上，'right'：右邊卡片在上)，因不希望專案初始化就呈現動畫效果，所以 state 的初始值設定 'init' (無切換的動畫效果)
 
-```
-const [showedCard, setShowedCard] = useState('init')
+```javascript
+const [showedCard, setShowedCard] = useState('init');
 ```
 
 - 在單一卡片上掛載 onClick 事件，並執行 handleShowed 的 eventHandler，handleShowed 中當 showedCard 不等於 'left' 時 setState('left')，反之 setState('right')。
 
-```
-  const handleShowed = () => {
-    if (showedCard !== 'left') {
-      setShowedCard('left');
-    } else {
-      setShowedCard('right');
-    }
-  };
+```javascript
+const handleShowed = () => {
+  if (showedCard !== 'left') {
+    setShowedCard('left');
+  } else {
+    setShowedCard('right');
+  }
+};
 ```
 
 - 利用 state 改變 className，結合 css-animation 呈現動畫效果，以左邊卡片為例：
 
-```
+```javascript
 <div
   className={
-     showedCard === 'left'
+    showedCard === 'left'
       ? styles.animated__up
       : showedCard === 'right'
       ? styles.animated__down
@@ -95,7 +95,7 @@ const [showedCard, setShowedCard] = useState('init')
   }
   onClick={handleShowed}
 >
-...
+  ...
 </div>
 ```
 
@@ -103,11 +103,13 @@ const [showedCard, setShowedCard] = useState('init')
 
 ### Effective video block
 
+![gif](./public/gifVideo.gif)
+
 首先思考使用者做了甚麼而會影響影片的撥放、暫停和 reset 時間為 0，考量到當畫面 scrolling 和 resize 時會影響 video 於畫面上的位置。
 
 - useEffect 裡 window.addEventListener 包含 'scroll' 和 'resize'。
 
-```
+```javascript
  useEffect(() => {
   window.addEventListener('scroll', handleScroll);
   window.addEventListener('resize', handleSize);
@@ -122,7 +124,7 @@ const [showedCard, setShowedCard] = useState('init')
 
 - handleScroll 和 handleSize 函式裡的 handleVideoPlay 函式為控制影片播放、暫停和 reset 的控制。
 
-```
+```javascript
 function handleVideoPlay(...) {
 <!-- 影片播放的範圍 -->
   const videoPlayScope =
@@ -159,7 +161,7 @@ winPosition + winHeight - videoPositionTop < 0
 
 - 條件判斷控制 video 行為
 
-```
+```javascript
 function handleVideoPlay(...) {
   ...
   if (videoPlayScope) {
@@ -179,9 +181,11 @@ function handleVideoPlay(...) {
 
 ### Horizontal Block
 
+![gif](./public/gifHorizontal.gif)
+
 - 只有當鼠進入後，scrolling 才會使元素橫向移動，useEffect 設置監聽事件 'moseove'，監聽滑鼠移動的事件。
 
-```
+```javascript
 useEffect(() => {
   ...
   window.addEventListener('mousemove', handleMouseMove);
@@ -195,7 +199,7 @@ useEffect(() => {
 
 - 為了確保滑鼠進入後，整個元素在視窗內(使用者不會有看不到內容的情形)，滑鼠是否進入元素內了，如果有 element.scrollIntoView()。
 
-```
+```javascript
 function handleMouseInPhotos(...) {
   ...
   if (mousePosition + winPosition > photoPositionTop) {
@@ -210,19 +214,19 @@ function handleMouseInPhotos(...) {
 
 - 元素橫向移動，先在元素上掛載 'onWheel' 事件，當滑鼠在元素內滾動滾輪時執行 handleOnWheel。
 
-```
+```javascript
 <div
   className={styles.photos}
   onWheel={e => handleOnWheel(e)}
   ref={props.photosRef}
 >
-...
+  ...
 </div>
 ```
 
 - 利用 React Hook：useState 紀錄滾輪滾動的值，並作為元素橫移的量。
 
-```
+```javascript
 const [scrollLeft, setScrollLeft] = useState(0);
 ...
 const handleOnWheel = e => {
