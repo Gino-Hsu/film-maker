@@ -1,6 +1,6 @@
 ## 規格說明
 
----
+
 
 - Header：往下滑動時 (scrollTop > 300px) 隱藏 Header，滾輪向上捲動時顯示 Header，隱藏及顯示的過程有 transition 效果。
 - Cards Shuffle Block：卡片切換的特效，引用透視視角確保視覺往真實視角逼近。
@@ -9,7 +9,7 @@
 
 ## 工具
 
----
+
 
 - Next.js v13.2.4
 - React.js v18.2.0
@@ -17,7 +17,6 @@
 
 ## 實作方法
 
----
 
 ### Header
 
@@ -61,6 +60,7 @@ function handleHeaderShowed(winPosition, setState) {
   }
 }
 ```
+---
 
 ### Cards Shuffle Block
 
@@ -98,6 +98,8 @@ const [showedCard, setShowedCard] = useState('init')
 ...
 </div>
 ```
+
+---
 
 ### Effective video block
 
@@ -172,6 +174,8 @@ function handleVideoPlay(...) {
   }
 }
 ```
+
+---
 
 ### Horizontal Block
 
