@@ -7,6 +7,14 @@
 - Effective video block：entry ratio 大於 30% 後播放影片，小於時暫停播放。當 invisible 時，主動將播放進度 reset 回 time = 0。
 - Horizontal Block：該區當滑鼠進入後，scrolling 的效果是讓元素橫向移動來閱覽橫向擴展的內容。
 
+## 工具
+
+---
+
+- Next.js v13.2.4
+- React.js v18.2.0
+- Sass v1.60.0
+
 ## 實作方法
 
 ---
@@ -223,9 +231,11 @@ const handleOnWheel = e => {
     ...
     if (scrollValue < 0) {
       ...
+
       // 當 scrollValue < 0 已經向上滾動滾動超出元素的起始範圍，所以 setState(0)
       return 0;
     } else if (scrollValue > photoWidth - windowWidth) {
+
       // 當 scrollValue > photoWidth - windowWidth 已經向下滾動滾動超出元素的尾部範圍，所以只要對元素超出視窗的範圍做 setState，setState(photoWidth - windowWidth)
       return photoWidth - windowWidth;
     } else {
@@ -234,3 +244,5 @@ const handleOnWheel = e => {
   });
 }
 ```
+
+- 優化，為了不讓元素橫向移動的過程，視窗也跟著上下移動，在特定地方加入 document.documentElement.style.overflowY = 'hidden' 移除瀏覽器的 scroll，document.documentElement.style.overflowY = 'auto' 恢復瀏覽器的 scroll。
