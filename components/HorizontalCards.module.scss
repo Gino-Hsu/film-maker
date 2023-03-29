@@ -1,3 +1,5 @@
+@use '../styles/mixin' as style;
+
 .photos {
   position: relative;
   width: 100%;
@@ -20,15 +22,22 @@
 .container {
   position: sticky;
   top: 0;
-  margin: 0 30px;
+  margin: 0 10px;
   width: 30vw;
   max-width: 400px;
   height: min-content;
   flex-shrink: 0;
   overflow: hidden;
+  @include style.rwd-animation;
 
   img {
     display: block;
     width: 100%;
+  }
+}
+
+@media screen and (min-width: 750px) {
+  .container {
+    margin: 0 30px;
   }
 }

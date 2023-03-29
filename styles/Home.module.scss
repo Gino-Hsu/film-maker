@@ -1,5 +1,9 @@
-$cards_position_top: 223px;
-$discription_mt_mb: 355px;
+@use '../styles/mixin' as style;
+
+$cards-position-top-mobile: 200px;
+$cards-position-top-desktop: 223px;
+$discription-mt-mb-mobile: 155px;
+$discription-mt-mb-desktop: 355px;
 
 .headerDisplay {
   z-index: 2;
@@ -18,28 +22,51 @@ $discription_mt_mb: 355px;
 
 .description1 {
   width: 50vw;
-  margin: $discription_mt_mb auto;
-  margin-top: calc($discription_mt_mb + $cards_position_top);
+  margin: $discription-mt-mb-mobile auto;
+  margin-top: calc($discription-mt-mb-mobile + $cards-position-top-mobile);
   word-wrap: break-word;
   text-align: center;
+  @include style.rwd-animation;
 
   p {
     font-style: italic;
-    font-size: 2rem;
-    font-weight: 700;
-    line-height: 40px;
+    font-size: 1.5rem;
+    font-weight: 600;
+    line-height: 30px;
   }
 }
 
 .description2 {
   @extend .description1;
-  margin-top: $discription_mt_mb;
+  margin-top: $discription-mt-mb-mobile;
+  @include style.rwd-animation;
 }
 
 .cards {
   width: 70%;
+  max-width: 1000px;
   height: 40vw;
+  max-height: 580px;
   margin: 0 auto;
   position: relative;
-  top: $cards_position_top;
+  top: $cards-position-top-mobile;
+}
+
+@media screen and (min-width: 750px) {
+  .description1 {
+    margin: $discription-mt-mb-desktop auto;
+    margin-top: calc($discription-mt-mb-desktop + $cards-position-top-desktop);
+
+    p {
+      font-size: 2rem;
+      font-weight: 700;
+      line-height: 40px;
+    }
+  }
+  .description2 {
+    margin-top: $discription-mt-mb-desktop;
+  }
+  .cards {
+    top: $cards-position-top-desktop;
+  }
 }
