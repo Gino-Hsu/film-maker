@@ -217,8 +217,9 @@ useEffect(() => {
 ```javascript
 <div
   className={styles.photos}
-  onWheel={e => handleOnWheel(e)}
+  onWheel={handleOnScroll}
   ref={props.photosRef}
+  style={{ height: photoElement.current?.clientHeight }}
 >
   ...
 </div>
@@ -229,27 +230,18 @@ useEffect(() => {
 ```javascript
 const [scrollLeft, setScrollLeft] = useState(0);
 ...
-const handleOnWheel = e => {
-  const value = e.deltaY; // 滾輪滾動的值，向下滾動為正值，向上滾動為負值
+const handleOnScroll = () => {
   ...
-
-  setScrollLeft(pre => {
-    // 前一次 state 的值 + 滾輪滾動的值，為元素移動的值 scrollValue
-    const scrollValue = pre + value;
+ if (scrollValue === 0) {
+    // 0 滾動的起始點
+    setScrollLeft(0);
     ...
-    if (scrollValue < 0) {
-      ...
-
-      // 當 scrollValue < 0 已經向上滾動滾動超出元素的起始範圍，所以 setState(0)
-      return 0;
-    } else if (scrollValue > photoWidth - windowWidth) {
-
-      // 當 scrollValue > photoWidth - windowWidth 已經向下滾動滾動超出元素的尾部範圍，所以只要對元素超出視窗的範圍做 setState，setState(photoWidth - windowWidth)
-      return photoWidth - windowWidth;
-    } else {
-      return pre + value;
-    }
-  });
+  } else if (scrollValue >= photoWidth - windowWidth) {
+    // photoWidth - windowWidth 滾動終止點
+    setScrollLeft(photoWidth - windowWidth);
+  } else {
+    setScrollLeft(scrollValue);
+  }
 }
 ```
 

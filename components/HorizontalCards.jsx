@@ -33,6 +33,7 @@ export default function Photos(props) {
     const scrollValue = photoElement.current?.offsetTop;
     const photoWidth = photoContainerElement.current?.offsetWidth;
     const windowWidth = window.innerWidth;
+
     // 停止瀏覽器 scrolling
     document.documentElement.style.overflowY = 'hidden';
 
@@ -56,7 +57,7 @@ export default function Photos(props) {
   return (
     <div
       className={styles.photos}
-      onScroll={e => handleOnScroll(e)}
+      onScroll={handleOnScroll}
       ref={props.photosRef}
       style={{ height: photoElement.current?.clientHeight }}
     >
