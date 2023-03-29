@@ -27,48 +27,49 @@ const photos = [
 export default function Photos(props) {
   const [scrollLeft, setScrollLeft] = useState(0);
   const photoContainerElement = useRef();
+  const photoElement = useRef();
 
-  const handleOnWheel = e => {
-    const value = e.deltaY;
+  const handleOnScroll = () => {
+    const scrollValue = photoElement.current?.offsetTop;
+    const photoWidth = photoContainerElement.current?.offsetWidth;
     const windowWidth = window.innerWidth;
-    const photoWidth = photoContainerElement.current.offsetWidth;
-
     // 停止瀏覽器 scrolling
     document.documentElement.style.overflowY = 'hidden';
 
-    setScrollLeft(pre => {
-      const scrollValue = pre + value;
-
-      if (scrollValue < 0) {
-        // 開啟瀏覽器 scrolling
-        document.documentElement.style.overflowY = 'auto';
-        return 0;
-      } else if (scrollValue > photoWidth - windowWidth) {
-        return photoWidth - windowWidth;
-      } else {
-        return pre + value;
-      }
-    });
+    if (scrollValue === 0) {
+      setScrollLeft(0);
+      document.documentElement.style.overflowY = 'auto';
+    } else if (scrollValue >= photoWidth - windowWidth) {
+      setScrollLeft(photoWidth - windowWidth);
+    } else {
+      setScrollLeft(scrollValue);
+    }
   };
 
   useEffect(() => {
     if (scrollLeft > 0) {
       // 確保元素位於視窗內
-      window.scrollTo(0, photoContainerElement.current.offsetTop);
+      window.scrollTo(0, props.photosRef.current.offsetTop);
     }
-    // 元素橫向滾動
-    props.photosRef.current.scrollTo(scrollLeft, 0);
   }, [scrollLeft]);
 
   return (
     <div
       className={styles.photos}
-      onWheel={e => handleOnWheel(e)}
+      onScroll={e => handleOnScroll(e)}
       ref={props.photosRef}
+      style={{ height: photoElement.current?.clientHeight }}
     >
-      <div className={styles.scroll__container} ref={photoContainerElement}>
+      <div
+        className={styles.scroll__container}
+        ref={photoContainerElement}
+        style={{
+          height: photoContainerElement.current?.offsetWidth,
+          transform: `translate(${-scrollLeft}px, 0)`,
+        }}
+      >
         {photos.map(photo => (
-          <div key={photo.id} className={styles.container}>
+          <div key={photo.id} className={styles.container} ref={photoElement}>
             <img src={photo.photoSrc} alt={`圖片${photo.id}`} />
           </div>
         ))}
