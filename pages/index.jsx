@@ -20,7 +20,6 @@ export default function Home() {
         <header>
           <Header />
         </header>
-
         <section className={styles.cards}>
           <ShuffleCards />
         </section>
