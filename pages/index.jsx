@@ -1,4 +1,3 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
 import Head from 'next/head';
 
 import Header from '@/components/Header';
@@ -6,85 +5,9 @@ import ShuffleCards from '@/components/ShuffleCards';
 import Video from '@/components/Video';
 import HorizontalCards from '@/components/HorizontalCards';
 
-import { handleHeaderShowed, handleVideoPlay } from '@/utils/handleFunc';
-
 import styles from '@/styles/Home.module.scss';
 
 export default function Home() {
-  const [headerShowed, setHeaderShowed] = useState(true);
-
-  const videoElement = useRef();
-  const photosElement = useRef();
-  // 存滑鼠是否在元素內，且還未執行 scrollIntoView() 的狀態
-  const mouseInPhotos = useRef(true);
-
-  const handleScroll = () => {
-    const videoHeight = videoElement.current?.clientHeight;
-    const videoPositionTop = videoElement.current?.offsetTop;
-    const windowHeight = window.innerHeight;
-    const windowPosition = window.scrollY;
-
-    // 控制 Header 隱藏或顯示
-    handleHeaderShowed(windowPosition, setHeaderShowed);
-    // 控制 Video 播放、暫停或 reset
-    handleVideoPlay(
-      videoElement.current,
-      videoHeight,
-      videoPositionTop,
-      windowHeight,
-      windowPosition
-    );
-  };
-
-  const handleSize = () => {
-    const videoHeight = videoElement.current?.clientHeight;
-    const videoPositionTop = videoElement.current?.offsetTop;
-    const windowHeight = window.innerHeight;
-    const windowPosition = window.scrollY;
-
-    // 控制 Video 播放、暫停或 reset
-    handleVideoPlay(
-      videoElement.current,
-      videoHeight,
-      videoPositionTop,
-      windowHeight,
-      windowPosition
-    );
-  };
-
-  const handleMouseMove = e => {
-    const mousePosition = e.clientY;
-    const photoPositionTop = photosElement.current?.offsetTop;
-    const windowPosition = window.scrollY;
-
-    if (mousePosition + windowPosition > photoPositionTop) {
-      if (mouseInPhotos.current) {
-        photosElement.current.scrollIntoView({
-          behavior: 'smooth',
-        });
-      }
-      mouseInPhotos.current = false;
-    } else {
-      document.documentElement.style.overflowY = 'auto';
-      mouseInPhotos.current = true;
-    }
-  };
-
-  useEffect(() => {
-    // 掛載監聽器，監聽 window 的滾動事件
-    window.addEventListener('scroll', handleScroll);
-    // 掛載監聽器，監聽 window size 改變
-    window.addEventListener('resize', handleSize);
-    // 掛載監聽器，監聽滑鼠位置
-    window.addEventListener('mousemove', handleMouseMove);
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      window.removeEventListener('resize', handleSize);
-      window.removeEventListener('mousemove', handleMouseMove);
-    };
-  }, []);
-
   return (
     <>
       <Head>
@@ -94,13 +17,9 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main>
-        <div
-          className={
-            headerShowed ? styles.headerDisplay : styles.headerDisplay__hidden
-          }
-        >
+        <header>
           <Header />
-        </div>
+        </header>
         <section className={styles.cards}>
           <ShuffleCards />
         </section>
@@ -111,7 +30,7 @@ export default function Home() {
           </p>
         </div>
         <section className={styles.video}>
-          <Video videoRef={videoElement} />
+          <Video />
         </section>
         <div className={styles.description2}>
           <p>
@@ -120,7 +39,7 @@ export default function Home() {
           </p>
         </div>
         <section>
-          <HorizontalCards photosRef={photosElement} />
+          <HorizontalCards />
         </section>
       </main>
     </>
