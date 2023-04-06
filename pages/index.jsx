@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef, useCallback } from 'react';
+import { useEffect, useRef } from 'react';
 import Head from 'next/head';
 
 import Header from '@/components/Header';
@@ -6,13 +6,11 @@ import ShuffleCards from '@/components/ShuffleCards';
 import Video from '@/components/Video';
 import HorizontalCards from '@/components/HorizontalCards';
 
-import { handleHeaderShowed, handleVideoPlay } from '@/utils/handleFunc';
+import { handleVideoPlay } from '@/utils/handleFunc';
 
 import styles from '@/styles/Home.module.scss';
 
 export default function Home() {
-  const [headerShowed, setHeaderShowed] = useState(true);
-
   const videoElement = useRef();
   const photosElement = useRef();
   // 存滑鼠是否在元素內，且還未執行 scrollIntoView() 的狀態
@@ -24,8 +22,6 @@ export default function Home() {
     const windowHeight = window.innerHeight;
     const windowPosition = window.scrollY;
 
-    // 控制 Header 隱藏或顯示
-    handleHeaderShowed(windowPosition, setHeaderShowed);
     // 控制 Video 播放、暫停或 reset
     handleVideoPlay(
       videoElement.current,
@@ -94,13 +90,10 @@ export default function Home() {
         <link rel='icon' href='/favicon.ico' />
       </Head>
       <main>
-        <div
-          className={
-            headerShowed ? styles.headerDisplay : styles.headerDisplay__hidden
-          }
-        >
+        <header>
           <Header />
-        </div>
+        </header>
+
         <section className={styles.cards}>
           <ShuffleCards />
         </section>

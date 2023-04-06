@@ -1,11 +1,3 @@
-export function handleHeaderShowed(winPosition, setState) {
-  if (winPosition > 300) {
-    setState(false);
-  } else {
-    setState(true);
-  }
-}
-
 export function handleVideoPlay(
   videoRef,
   videoHeight,
