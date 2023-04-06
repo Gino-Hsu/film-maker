@@ -17,6 +17,24 @@ export default function Cards() {
     }
   };
 
+  const changeStyle = value => {
+    if (value === 'left') {
+      if (showedCard === 'left') {
+        return styles.animated__up;
+      } else if (showedCard === 'right') {
+        return styles.animated__down;
+      }
+    }
+
+    if (value === 'right') {
+      if (showedCard === 'right') {
+        return styles.animated__up;
+      } else if (showedCard === 'left') {
+        return styles.animated__down;
+      }
+    }
+  };
+
   return (
     <div className={styles.cards}>
       <div
@@ -24,17 +42,9 @@ export default function Cards() {
           ${styles.left__container}
           ${showedCard === 'left' && styles['index__up']}
         `}
+        onClick={handleShowed}
       >
-        <div
-          className={
-            showedCard === 'left'
-              ? styles.animated__up
-              : showedCard === 'right'
-              ? styles.animated__down
-              : ''
-          }
-          onClick={handleShowed}
-        >
+        <div className={changeStyle('left')}>
           <img className={styles.image} src={cardsSrc.cardOne} alt='卡片1' />
         </div>
       </div>
@@ -43,17 +53,9 @@ export default function Cards() {
           ${styles.right__container}
           ${showedCard === 'left' && styles['index__down']}
         `}
+        onClick={handleShowed}
       >
-        <div
-          className={
-            showedCard === 'right'
-              ? styles.animated__up
-              : showedCard === 'left'
-              ? styles.animated__down
-              : ''
-          }
-          onClick={handleShowed}
-        >
+        <div className={changeStyle('right')}>
           <img className={styles.image} src={cardsSrc.cardTwo} alt='卡片2' />
         </div>
       </div>

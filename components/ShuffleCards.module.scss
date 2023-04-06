@@ -1,18 +1,20 @@
 .cards {
   width: 100%;
   height: 100%;
-  perspective: 800px;
+  perspective: 1000px;
+  transform-style: preserve-3d;
 }
 
 .left__container,
 .right__container {
   position: absolute;
   transition: transform 0.3s ease-in;
-  perspective: 300px;
+  perspective: 1000px;
+  transform-style: inherit;
 
   &:hover {
     cursor: pointer;
-    transform: translateZ(50px);
+    transform: scale(1.1);
   }
 }
 
@@ -55,48 +57,48 @@
 
 @keyframes left-move-up {
   0% {
-    transform: translate(0, 0);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate(-20%, -25%) scale(1.1) rotate3d(0, 1, 1, 8deg);
+    transform: translate3d(-50px, -50px, 30px) rotate3d(1, -1, -1, 20deg);
   }
   100% {
-    transform: translate(0, 0) scale(1.3);
+    transform: translate3d(0, 0, 30px);
   }
 }
 
 @keyframes left-move-down {
   0% {
-    transform: translate(0, 0) scale(1.3);
+    transform: translate3d(0, 0, 30px);
   }
   50% {
-    transform: translate(-20%, -25%) scale(1.1) rotate3d(0, 1, 1, 8deg);
+    transform: translate3d(-50px, -50px, -20px) rotate3d(-1, 1, -1, 20deg);
   }
   100% {
-    transform: translate(0, 0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes right-move-up {
   0% {
-    transform: translate(0, 0) scale(0.7);
+    transform: translate3d(0, 0, -30px);
   }
   50% {
-    transform: translate(20%, 25%) scale(0.9) rotate3d(0, 1, 1, -8deg);
+    transform: translate3d(50px, 50px, 20px) rotate3d(1, -1, 1, -20deg);
   }
   100% {
-    transform: translate(0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
 }
 
 @keyframes right-move-down {
   0% {
-    transform: translate(0) scale(1);
+    transform: translate3d(0, 0, 0);
   }
   50% {
-    transform: translate(20%, 25%) scale(0.9) rotate3d(0, 1, 1, -8deg);
+    transform: translate3d(50px, 50px, -30px) rotate3d(-1, 1, 1, -20deg);
   }
   100% {
-    transform: translate(0) scale(0.7);
+    transform: translate3d(0, 0, -30px);
   }
 }
