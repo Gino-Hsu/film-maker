@@ -72,7 +72,6 @@ export default function Photos() {
   const setStatefunc = () => {
     setMainContainerHeight(photoElements.current.clientHeight);
     setScrollContainerHeight(photoContainerElement.current.offsetWidth);
-    document.body.style.height = 'max-content';
   };
 
   useEffect(() => {
