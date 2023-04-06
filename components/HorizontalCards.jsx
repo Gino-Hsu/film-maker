@@ -58,7 +58,9 @@ export default function Photos() {
     if (mousePosition + windowPosition > photoPositionTop) {
       if (mouseInPhotos.current) {
         window.scrollTo(0, mainContainerElement.current.offsetTop);
-        document.documentElement.style.overflowY = 'hidden';
+        setTimeout(() => {
+          document.documentElement.style.overflowY = 'hidden';
+        }, 500);
       }
       mouseInPhotos.current = false;
     } else {
