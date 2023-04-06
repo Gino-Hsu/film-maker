@@ -1,6 +1,6 @@
 @use '../styles/mixin' as style;
 
-.photos {
+.main__container {
   position: relative;
   width: 100%;
   padding: 0 10px;
@@ -14,14 +14,18 @@
 
 .scroll__container {
   width: max-content;
-  display: flex;
-  position: relative;
   transition: all 0.3s ease-out;
 }
 
-.container {
+.photos {
   position: sticky;
   top: 0;
+  width: max-content;
+  height: min-content;
+  display: flex;
+}
+
+.photo {
   margin: 0 10px;
   width: 30vw;
   max-width: 400px;

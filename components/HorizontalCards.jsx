@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useMouseMove, useWindowSize } from '@/utils/customHooks';
 import styles from './HorizontalCards.module.scss';
 
 const photos = [
@@ -24,21 +25,23 @@ const photos = [
   },
 ];
 
-export default function Photos(props) {
+export default function Photos() {
   const [scrollLeft, setScrollLeft] = useState(0);
+  const [mainContainerHeight, setMainContainerHeight] = useState();
+  const [scrollContainerHeight, setScrollContainerHeight] = useState();
+  const mainContainerElement = useRef();
   const photoContainerElement = useRef();
-  const photoElement = useRef();
+  const photoElements = useRef();
+  const mouseInPhotos = useRef(true);
 
   const handleOnScroll = () => {
-    const scrollValue = photoElement.current?.offsetTop;
+    const scrollValue = photoElements.current?.offsetTop;
     const photoWidth = photoContainerElement.current?.offsetWidth;
     const windowWidth = window.innerWidth;
 
-    // 停止瀏覽器 scrolling
     document.documentElement.style.overflowY = 'hidden';
-
     if (scrollValue === 0) {
-      setScrollLeft(0);
+      setScrollLeft(scrollValue);
       document.documentElement.style.overflowY = 'auto';
     } else if (scrollValue >= photoWidth - windowWidth) {
       setScrollLeft(photoWidth - windowWidth);
@@ -47,33 +50,60 @@ export default function Photos(props) {
     }
   };
 
-  useEffect(() => {
-    if (scrollLeft > 0) {
-      // 確保元素位於視窗內
-      window.scrollTo(0, props.photosRef.current.offsetTop);
+  const handleMouseMove = e => {
+    const mousePosition = e.clientY;
+    const photoPositionTop = mainContainerElement.current?.offsetTop;
+    const windowPosition = window.scrollY;
+
+    if (mousePosition + windowPosition > photoPositionTop) {
+      if (mouseInPhotos.current) {
+        window.scrollTo(0, mainContainerElement.current.offsetTop);
+        document.documentElement.style.overflowY = 'hidden';
+      }
+      mouseInPhotos.current = false;
+    } else {
+      document.documentElement.style.overflowY = 'auto';
+      mouseInPhotos.current = true;
     }
-  }, [scrollLeft]);
+  };
+
+  const setStatefunc = () => {
+    setMainContainerHeight(photoElements.current.clientHeight);
+    setScrollContainerHeight(photoContainerElement.current.offsetWidth);
+    document.body.style.height = 'max-content';
+  };
+
+  useEffect(() => {
+    if (photoElements.current && photoContainerElement.current) {
+      setStatefunc();
+    }
+  }, [photoElements.current, photoContainerElement.current]);
+
+  useMouseMove(handleMouseMove);
+  useWindowSize(setStatefunc);
 
   return (
     <div
-      className={styles.photos}
       onScroll={handleOnScroll}
-      ref={props.photosRef}
-      style={{ height: photoElement.current?.clientHeight }}
+      className={styles.main__container}
+      ref={mainContainerElement}
+      style={{ height: `${mainContainerHeight}px` }}
     >
       <div
         className={styles.scroll__container}
         ref={photoContainerElement}
         style={{
-          height: photoContainerElement.current?.offsetWidth,
+          height: `${scrollContainerHeight}px`,
           transform: `translate(${-scrollLeft}px, 0)`,
         }}
       >
-        {photos.map(photo => (
-          <div key={photo.id} className={styles.container} ref={photoElement}>
-            <img src={photo.photoSrc} alt={`圖片${photo.id}`} />
-          </div>
-        ))}
+        <div className={styles.photos} ref={photoElements}>
+          {photos.map(photo => (
+            <div key={photo.id} className={styles.photo}>
+              <img src={photo.photoSrc} alt={`圖片${photo.id}`} />
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
